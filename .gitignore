@@ -1,0 +1,16 @@
+#System
+*.log
+*.env
+
+#Assembly .NET
+obj/
+bin/
+Debug/
+
+#Cache
+**/temp/
+**/cache/
+
+#API test files
+*.http
+*.rest
