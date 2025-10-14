@@ -13,6 +13,9 @@ builder.Services.AddIdentity();
 //Add Jwt authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
+//Add services
+builder.Services.AddServices();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

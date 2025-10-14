@@ -1,6 +1,7 @@
 
 using AuthService.Data;
 using AuthService.Models;
+using AuthService.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,13 @@ public static class ServiceExtensions
         serviceCollection.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+        return serviceCollection;
+    }
+    
+    public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<TokenService>();
             
         return serviceCollection;
     }
