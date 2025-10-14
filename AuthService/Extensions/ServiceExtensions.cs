@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Extensions;
 
-public static class ServiceCollectionExtensions
+public static class ServiceExtensions
 {
     public static IServiceCollection AddDataAccess(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
