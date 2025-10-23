@@ -7,16 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Services
 {
-    public class TokenService
+    public class TokenService(IConfiguration config, UserManager<ApplicationUser> userManager)
     {
-        private readonly IConfiguration _config;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public TokenService(IConfiguration config, UserManager<ApplicationUser> userManager)
-        {
-            _config = config;
-            _userManager = userManager;
-        }
+        private readonly IConfiguration _config = config;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public async Task<string> GenerateAccessToken(ApplicationUser user)
         {
@@ -34,6 +28,8 @@ namespace AuthService.Services
 
             var token = new JwtSecurityToken(
                 expires: DateTime.UtcNow.AddMinutes(15),
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
@@ -41,9 +37,6 @@ namespace AuthService.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string GenerateRefreshToken()
-        {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        }
+        public string GenerateRefreshToken() => Convert.ToBase64String(Guid.NewGuid().ToByteArray());
     }
 }
