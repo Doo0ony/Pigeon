@@ -10,6 +10,9 @@ public static class JwtExtensions
      IConfiguration configuration)
     {
         var jwtKey = configuration["Jwt:Key"] ?? throw new Exception("JWT key not set");
+        var issuer = configuration["Jwt:Issuer"] ?? throw new Exception("Issuer is not set");
+        var audience = configuration.GetSection("Jwt:Audience").Get<string[]>();
+        
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
         serviceCollection.AddAuthentication(options =>
@@ -21,8 +24,10 @@ public static class JwtExtensions
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidAudiences = audience,
+                ValidIssuer = issuer,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = key

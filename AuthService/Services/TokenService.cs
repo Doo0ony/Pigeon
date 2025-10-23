@@ -23,13 +23,15 @@ namespace AuthService.Services
 
             var userRoles = await _userManager.GetRolesAsync(user);
             authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+            
+            var audiences = _config.GetSection("Jwt:Audience").Get<string[]>() ?? throw new Exception("Jwt Audiences is not set");
+            authClaims.AddRange(audiences.Select(aud => new Claim(JwtRegisteredClaimNames.Aud, aud)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddMinutes(15),
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(_config["Jwt:AccessTokenMinutes"] ?? "15")),
                 issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
