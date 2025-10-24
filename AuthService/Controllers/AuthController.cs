@@ -24,12 +24,17 @@ namespace AuthService.Controllers
             var userExists = await _userManager.FindByNameAsync(dto.UserName);
             if (userExists is not null)
                 return BadRequest("User already exists");
-
+            
+            var emailExists = await _userManager.FindByEmailAsync(dto.Email);
+                if (emailExists is not null)
+                    return BadRequest("Email is already taken");
+            
             var user = new ApplicationUser
             {
                 UserName = dto.UserName,
                 Email = dto.Email,
-                FullName = dto.FullName
+                FirstName = dto.FirstName,
+                LastName = dto.LastName
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
