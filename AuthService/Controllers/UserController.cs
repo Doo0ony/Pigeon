@@ -1,3 +1,4 @@
+using AuthService.Models.DTOs;
 using AuthService.Models.DTOs.Filters;
 using AuthService.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,9 @@ public class UserController(IUserService userService)
     }
 
     [HttpPost("exists")]
-    public async Task<IActionResult> UserExists([FromBody] IEnumerable<string> userIds)
+    public async Task<IActionResult> UserExists([FromBody] UserExistRequestDto dto)
     {
-        var result = await _userService.UserExistsAsync(userIds);
+        var result = await _userService.UserExistsAsync(dto);
 
         return result.ToActionResult();
     }

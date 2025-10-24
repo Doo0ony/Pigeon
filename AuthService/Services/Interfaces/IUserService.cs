@@ -8,5 +8,5 @@ namespace AuthService.Services.Interfaces;
 public interface IUserService
 {
     Task<ServiceResult<List<UserSearchResultDto>>> SearchUserAsync(SearchUserFilterDto dto);
-    Task<ServiceResult<UserExistResponseDto>> UserExistsAsync(IEnumerable<string> userIds);
+    Task<ServiceResult<UserExistResponseDto>> UserExistsAsync(UserExistRequestDto dto);
 }

@@ -26,8 +26,10 @@ IUserRepository userRepository) : IUserService
         return ServiceResult<List<UserSearchResultDto>>.SuccessResult([]);
     }
 
-    public async Task<ServiceResult<UserExistResponseDto>> UserExistsAsync(IEnumerable<string> userIds)
+    public async Task<ServiceResult<UserExistResponseDto>> UserExistsAsync(UserExistRequestDto dto)
     {
+        var userIds = dto.UserIds;
+        
         if (userIds == null || !userIds.Any())
             return ServiceResult<UserExistResponseDto>.FailResult(
                 "User list is empty",
