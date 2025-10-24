@@ -1,6 +1,6 @@
 using AuthService.Data;
-using AuthService.Models;
 using AuthService.Models.DTOs;
+using AuthService.Models.DTOs.Filters;
 using AuthService.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +10,18 @@ public class UserRepository(AppDbContext context) : IUserRepository
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<List<UserSearchResultDto>> SearchByUserNameAsync(string userName)
+    public async Task<List<UserSearchResultDto>> SearchAsync(SearchUserFilterDto dto)
     {
-        var users = await _context.Users
-            .Where(u => u.UserName != null && u.UserName.ToLower().Contains(userName.ToLower()))
+        var users = _context.Users.AsQueryable();
+
+        if (!string.IsNullOrEmpty(dto.UserName))
+        {
+            users = users.Where(u =>
+                u.UserName != null &&
+                u.UserName.ToLower().Contains(dto.UserName.ToLower()));
+        }
+
+        var result = await users
             .Select(u => new UserSearchResultDto
             {
                 Id = u.Id,
@@ -25,6 +33,6 @@ public class UserRepository(AppDbContext context) : IUserRepository
             .Take(10)
             .ToListAsync();
 
-        return users;
+        return result;
     }
 }

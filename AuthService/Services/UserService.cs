@@ -16,11 +16,12 @@ IUserRepository userRepository) : IUserService
 
     public async Task<ServiceResult<List<UserSearchResultDto>>> SearchUser(SearchUserFilterDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.UserName))
-            return ServiceResult<List<UserSearchResultDto>>.SuccessResult([]);
-            
-        var result = await _userRepository.SearchByUserNameAsync(dto.UserName);
-
-        return ServiceResult<List<UserSearchResultDto>>.SuccessResult(result);
+        if (!string.IsNullOrWhiteSpace(dto.UserName))
+        {
+            var result = await _userRepository.SearchAsync(dto);
+            return ServiceResult<List<UserSearchResultDto>>.SuccessResult(result);
+        }
+        
+        return ServiceResult<List<UserSearchResultDto>>.SuccessResult([]);
     }
 }
