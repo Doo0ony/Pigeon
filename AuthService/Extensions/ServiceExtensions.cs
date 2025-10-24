@@ -1,7 +1,10 @@
 
 using AuthService.Data;
 using AuthService.Models;
+using AuthService.Repositories;
+using AuthService.Repositories.Interfaces;
 using AuthService.Services;
+using AuthService.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +32,10 @@ public static class ServiceExtensions
     public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<TokenService>();
-            
+        
+        serviceCollection.AddScoped<IUserService, UserService>();
+        serviceCollection.AddScoped<IUserRepository, UserRepository>();
+        
         return serviceCollection;
     }
 }
