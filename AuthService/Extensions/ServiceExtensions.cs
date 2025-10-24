@@ -35,7 +35,8 @@ public static class ServiceExtensions
         
         serviceCollection.AddScoped<IUserService, UserService>();
         serviceCollection.AddScoped<IUserRepository, UserRepository>();
-        
-        return serviceCollection;
+
+        serviceCollection.AddScoped<IIdentityService, IdentityService>();
+        return serviceCollection; 
     }
 }

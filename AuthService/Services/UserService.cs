@@ -30,7 +30,7 @@ IUserRepository userRepository) : IUserService
     {
         var userIds = dto.UserIds;
         
-        if (userIds == null || !userIds.Any())
+        if (userIds is null || ! userIds.Any())
             return ServiceResult<UserExistResponseDto>.FailResult(
                 "User list is empty",
                 Shared.Enums.ErrorCode.ValidationError
