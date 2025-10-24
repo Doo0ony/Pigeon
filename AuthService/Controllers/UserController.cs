@@ -17,7 +17,15 @@ public class UserController(IUserService userService)
     [HttpPost("search")]
     public async Task<IActionResult> SearchUser([FromBody] SearchUserFilterDto dto)
     {
-        var result = await _userService.SearchUser(dto);
+        var result = await _userService.SearchUserAsync(dto);
+
+        return result.ToActionResult();
+    }
+
+    [HttpPost("exists")]
+    public async Task<IActionResult> UserExists([FromBody] IEnumerable<string> userIds)
+    {
+        var result = await _userService.UserExistsAsync(userIds);
 
         return result.ToActionResult();
     }
